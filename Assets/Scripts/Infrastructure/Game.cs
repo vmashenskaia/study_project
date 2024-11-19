@@ -1,3 +1,6 @@
+using Infrastructure.Services;
+using Infrastructure.States;
+using Logic;
 using Services.Input;
 using UnityEngine.Device;
 
@@ -5,19 +8,11 @@ namespace Infrastructure
 {
     public class Game
     {
-        public static IInputService InputService;
+        public GameStateMachine StateMachine;
 
-        public Game()
+        public Game(ICoroutineRunner coroutineRunner, LoadingCurtain curtain)
         {
-            RegisterInputService();
-        }
-
-        private void RegisterInputService()
-        {
-            if (Application.isEditor)
-                InputService = new StandaloneInputService();
-            else
-                InputService = new MobileInputService();
+            StateMachine = new GameStateMachine(new SceneLoader(coroutineRunner), curtain, AllServices.Container);
         }
     }
 }
